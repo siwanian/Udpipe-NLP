@@ -27,10 +27,12 @@ shinyUI(
         
         
         #multiplecheckbox
-        checkboxGroupInput("checkGroup", label=h3("XPOS Group"), choices= list(" Adjective(JJ)" = 1, " Noun(NN)" = 2, "ProperNoun(NNP)" = 3
-                                            ," Adverb(RB)"= 4," Verb(VB)"=5),selected = list(1,2,3)),hr(),
-        fluidRow(column(8, verbatimTextOutput("value")))
-        
+        checkboxGroupInput("checkGroup", label=h3("XPOS Group"), choices= list(" Adjective(JJ)" = 1, 
+                                                                               " Noun(NN)" = 2, 
+                                                                               "ProperNoun(NNP)" = 3,
+                                                                               " Adverb(RB)"= 4," 
+                                                                               Verb(VB)"=5),
+                                                                        selected = c(1,2,3))
         
       ),   # end of sidebar panel
       
