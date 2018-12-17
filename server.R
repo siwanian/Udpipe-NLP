@@ -11,92 +11,61 @@ options(shiny.maxRequestSize=30*1024^2)
 library(shiny)
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-   
+shinyServer(function(input, output, session) {
   Dataset <- reactive({
-    
-    if (is.null(input$file)) { return(NULL) } else
-      {
-        Data <- readLines(input$file$datapath)
-        Data <- str_replace_all(Data,"<.*?>","")
-        Data <- Data[Data!= ""]
-        return(Data)
-    }  # else stmt ends
-    
-  })  # reactive stmt ends
-  
-  #udpipe upload
-  #model <- reactive({
-   # lang <- renderText(input$text)
-    #lang<- str(lang)
-    #mod <- udpipe_download_model(language = lang)
-    #model = udpipe_load_model(mod)
-    #return(model)
-  #})
-  
-  
-  #output$mod<- renderPrint({str(input$udpipe)})
-    model = reactive({
-    model = udpipe_load_model("modfile.udpipe")
-    return(model)
+    if (is.null(input$file)) { return(NULL) } 
+    else{
+      Data <- readLines(input$file$datapath)
+      Data <- str_replace_all(Data,"<.*?>","")
+      Data <- Data[Data!= ""]
+      return(Data)
+    }
   })
-  
-  #Annotation etc
+  english_model = reactive({
+    english_model = udpipe_load_model("modfile.udpipe")
+    return(english_model)
+  })
   annot.obj = reactive({
-    x <- udpipe_annotate(model(),x=Dataset())
+    x <- udpipe_annotate(english_model(),x=Dataset())
     x <- as.data.frame(x)
     return(x)
   })
-  
   output$downloadData <- downloadHandler(
     filename = function(){
-      "finalAnnotated.csv"
+      "annotated_data.csv"
     },
     content = function(file){
       write.csv(annot.obj()[,-4],file,row.names = FALSE)
     }
   )
-  output$antd = renderDataTable({
+  output$anot = renderDataTable({
     if(is.null(input$file)){ return (NULL)}
     else {
       out = annot.obj()[,-4]
       return(out)
     }
   })
-  
-  #" Adjective(JJ)" = 1, " Noun(NN)" = 2, "ProperNoun(NNP)" = 3," Adverb(RB)"= 4," Verb(VB)"=5
-
-  
   output$plot1 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_adjectives = annot.obj() %>% subset(., checkGroup %in% 1)
-      top_adjectives = txt_freq(all_adjectives$lemma)
-      wordcloud(top_adjectives$key,top_adjectives$freq, min.freq = 3, colors = 1:10)
+      all_nouns = annot.obj() %>% subset(., upos %in% "NOUN")
+      top_nouns = txt_freq(all_nouns$lemma)
+      wordcloud(top_nouns$key,top_nouns$freq, min.freq = 3, colors = 1:10)
     }
   })
-  
   output$plot2 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_nouns = annot.obj() %>% subset(., checkGroup %in% 2)
-      top_nouns = txt_freq(all_nouns$lemma)
-      wordcloud(top_nouns$key,top_nouns$freq, min.freq = 3, colors = 1:10)
+      all_verbs = annot.obj() %>% subset(., upos %in% "VERB")
+      top_verbs = txt_freq(all_verbs$lemma)
+      wordcloud(top_verbs$key,top_verbs$freq, min.freq = 3, colors = 1:10)
     }
   })
   output$plot3 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      PPNs = annot.obj() %>% subset(., checkGroup %in% 3)
-      top_PPNs = txt_freq(PPNs$lemma)
-      wordcloud(top_PPNs$key,top_PPNs$freq, min.freq = 3, colors = 1:10)
-    }
-  })
-  output$plot4 = renderPlot({
-    if(is.null(input$file)){ return (NULL)}
-    else {
       co_occ <- cooccurrence(
-        x = subset(annot.obj(), checkGroup %in% input$checkGroup),
+        x = subset(annot.obj(), upos %in% input$upos),
         term = 'lemma',
         group = c("doc_id","paragraph_id","sentence_id"))
       wordnet <- head(co_occ, 50)
