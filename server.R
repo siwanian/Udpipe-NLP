@@ -49,7 +49,7 @@ shinyServer(function(input, output, session) {
   output$plot0 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_adverbs = annot.obj() %>% subset(., upos %in% "JJ")
+      all_adverbs = annot.obj() %>% subset(., xpos %in% "JJ")
       top_adverbs = txt_freq(all_adverbs$lemma)
       wordcloud(top_adverbs$key,top_adverbs$freq, min.freq = 3, colors = 1:10)
     }
@@ -57,7 +57,7 @@ shinyServer(function(input, output, session) {
   output$plot1 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_nouns = annot.obj() %>% subset(., upos %in% "NN")
+      all_nouns = annot.obj() %>% subset(., xpos %in% "NN")
       top_nouns = txt_freq(all_nouns$lemma)
       wordcloud(top_nouns$key,top_nouns$freq, min.freq = 3, colors = 1:10)
     }
@@ -65,7 +65,7 @@ shinyServer(function(input, output, session) {
   output$plot2 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_proper_noun = annot.obj() %>% subset(., upos %in% "NNP")
+      all_proper_noun = annot.obj() %>% subset(., xpos %in% "NNP")
       top_proper_noun = txt_freq(all_proper_noun$lemma)
       wordcloud(top_proper_noun$key,top_proper_noun$freq, min.freq = 3, colors = 1:10)
     }
@@ -74,7 +74,7 @@ shinyServer(function(input, output, session) {
     if(is.null(input$file)){ return (NULL)}
     else {
       co_occ <- cooccurrence(
-        x = subset(annot.obj(), upos %in% input$upos),
+        x = subset(annot.obj(), xpos %in% input$xpos),
         term = 'lemma',
         group = c("doc_id","paragraph_id","sentence_id"))
       wordnet <- head(co_occ, 50)
