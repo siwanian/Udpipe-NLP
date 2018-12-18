@@ -11,14 +11,14 @@ shinyUI(
         
         fileInput("file",label = "Upload text file"),
         
-        checkboxGroupInput("xpos", 
-                           label = h3("Select XPOS elements for analysis"),
-                           choices = list(" adjective(JJ)" = "ADJ",
-                                          " noun(NN)" = "NOUN",
-                                          " proper noun(NNP)" = "PRO",
-                                          " adverb(RB)"= "ADV",
-                                          " verb(VB)" = "VB"),
-                           selected = c("ADJ","NOUN","PRO")
+        checkboxGroupInput("upos", 
+                           label = h3("Select UPS for Co-occurrences Filtering"),
+                           choices = list("adjective" = "ADJ",
+                                          "noun" = "NOUN",
+                                          "proper noun" = "PROPN",
+                                          "adverb"= "ADV",
+                                          "verb" = "VERB"),
+                           selected = c("NOUN","VERB")
         )
       ),# end of sidebar panel
       
@@ -29,26 +29,24 @@ shinyUI(
                     
                     tabPanel("Overview",
                              br(),
-                             p("UDPipe NLP Workflow "),
+                             p("This app is to demonstrate the UDPipe NLP Workflow "),
                              br(),
                              h4('How to use this App'),
                              p("Please upload a text file from the left side panel by clicking on browse button"),
                              h4('Hint'),
-                             p(span(strong(" 1) Smaller files should be used as big files sometime create problem"))),
-                             p(span(strong(" 2) Upload the documents and wait till completion",align="justify")))
+                             p(span(strong(" 1) We suggest make use of smaller size text files"))),
+                             p(span(strong(" 2) This app takes time to load the respective tab content. So Kindly wait for sometime so that the content is displayed on respective tab.",align="justify")))
                     ),
                     
                     tabPanel("annotated documents",
-                             dataTableOutput('antd'),
+                             dataTableOutput('anot'),
                              br(),
                              br(),
                              downloadButton("downloadData","Download Annotated Data")),
                     tabPanel("Word Cloud Plots", 
-                             h3("Adjectives"),
-                             plotOutput('ploto'),
                              h3("Nouns"),
                              plotOutput('plot1'),
-                             h3("Proper Nouns"),
+                             h3("Verbs"),
                              plotOutput('plot2')),         
                     tabPanel("Co-ocuurrence graphs",
                              plotOutput('plot3')
