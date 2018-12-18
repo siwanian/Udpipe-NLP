@@ -38,17 +38,26 @@ shinyServer(function(input, output, session) {
       write.csv(annot.obj()[,-4],file,row.names = FALSE)
     }
   )
-  output$anot = renderDataTable({
+  output$antd = renderDataTable({
     if(is.null(input$file)){ return (NULL)}
     else {
       out = annot.obj()[,-4]
       return(out)
     }
   })
+  
+  output$plot0 = renderPlot({
+    if(is.null(input$file)){ return (NULL)}
+    else {
+      all_adverbs = annot.obj() %>% subset(., upos %in% "JJ")
+      top_adverbs = txt_freq(all_adverbs$lemma)
+      wordcloud(top_adverbs$key,top_adverbs$freq, min.freq = 3, colors = 1:10)
+    }
+  })
   output$plot1 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_nouns = annot.obj() %>% subset(., upos %in% "NOUN")
+      all_nouns = annot.obj() %>% subset(., upos %in% "NN")
       top_nouns = txt_freq(all_nouns$lemma)
       wordcloud(top_nouns$key,top_nouns$freq, min.freq = 3, colors = 1:10)
     }
@@ -56,9 +65,9 @@ shinyServer(function(input, output, session) {
   output$plot2 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_verbs = annot.obj() %>% subset(., upos %in% "VERB")
-      top_verbs = txt_freq(all_verbs$lemma)
-      wordcloud(top_verbs$key,top_verbs$freq, min.freq = 3, colors = 1:10)
+      all_proper_noun = annot.obj() %>% subset(., upos %in% "NNP")
+      top_proper_noun = txt_freq(all_proper_noun$lemma)
+      wordcloud(top_proper_noun$key,top_proper_noun$freq, min.freq = 3, colors = 1:10)
     }
   })
   output$plot3 = renderPlot({
