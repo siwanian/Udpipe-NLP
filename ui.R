@@ -13,12 +13,12 @@ shinyUI(
         
         checkboxGroupInput("xpos", 
                            label = h3("Select XPOS elements for analysis"),
-                           choices = list("adjective" = "JJ",
-                                          "noun" = "NN",
-                                          "proper noun" = "NNP",
-                                          "adverb"= "RB",
-                                          "verb" = "VB"),
-                           selected = c("JJ","NN","NNP")
+                           choices = list(" adjective(JJ)" = "ADJ",
+                                          " noun(NN)" = "NOUN",
+                                          " proper noun(NNP)" = "PRO",
+                                          " adverb(RB)"= "ADV",
+                                          " verb(VB)" = "VB"),
+                           selected = c("ADJ","NOUN","PRO")
         )
       ),# end of sidebar panel
       

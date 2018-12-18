@@ -50,7 +50,7 @@ shinyServer(function(input, output, session) {
   output$ploto = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_adjectives = annot.obj() %>% subset(., xpos %in% "JJ")
+      all_adjectives = annot.obj() %>% subset(., xpos %in% "ADJ")
       top_adjectives = txt_freq(all_adjectives$lemma)
       wordcloud(top_adjectives$key,top_adjectives$freq, min.freq = 3, colors = 1:10)
     }
@@ -59,7 +59,7 @@ shinyServer(function(input, output, session) {
   output$plot1 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_nouns = annot.obj() %>% subset(., xpos %in% "NN")
+      all_nouns = annot.obj() %>% subset(., xpos %in% "NOUN")
       top_nouns = txt_freq(all_nouns$lemma)
       wordcloud(top_nouns$key,top_nouns$freq, min.freq = 3, colors = 1:10)
     }
@@ -67,7 +67,7 @@ shinyServer(function(input, output, session) {
   output$plot2 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_proper_noun = annot.obj() %>% subset(., xpos %in% "NNP")
+      all_proper_noun = annot.obj() %>% subset(., xpos %in% "PRO")
       top_proper_noun = txt_freq(all_proper_noun$lemma)
       wordcloud(top_proper_noun$key,top_proper_noun$freq, min.freq = 3, colors = 1:10)
     }
