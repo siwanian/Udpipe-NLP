@@ -44,7 +44,8 @@ shinyUI(
                              br(),
                              downloadButton("downloadData","Download Annotated Data")),
                     tabPanel("Word Cloud Plots", 
-                             
+                             h3("Nouns"),
+                             plotOutput('ploto'),
                              h3("Nouns"),
                              plotOutput('plot1'),
                              h3("Proper Nouns"),
