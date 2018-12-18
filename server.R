@@ -46,14 +46,7 @@ shinyServer(function(input, output, session) {
     }
   })
   
-  output$plot0 = renderPlot({
-    if(is.null(input$file)){ return (NULL)}
-    else {
-      all_adverbs = annot.obj() %>% subset(., xpos %in% "JJ")
-      top_adverbs = txt_freq(all_adverbs$lemma)
-      wordcloud(top_adverbs$key,top_adverbs$freq, min.freq = 3, colors = 1:10)
-    }
-  })
+  
   output$plot1 = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
