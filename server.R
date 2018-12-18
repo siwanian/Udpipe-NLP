@@ -50,9 +50,9 @@ shinyServer(function(input, output, session) {
   output$ploto = renderPlot({
     if(is.null(input$file)){ return (NULL)}
     else {
-      all_adverbs = annot.obj() %>% subset(., xpos %in% "JJ")
-      top_adverbs = txt_freq(all_adverbs$lemma)
-      wordcloud(top_adverbs$key,top_adverbs$freq, min.freq = 3, colors = 1:10)
+      all_adjectives = annot.obj() %>% subset(., xpos %in% "JJ")
+      top_adjectives = txt_freq(all_adjectives$lemma)
+      wordcloud(top_adjectives$key,top_adjectives$freq, min.freq = 3, colors = 1:10)
     }
   })
   
